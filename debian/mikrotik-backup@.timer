@@ -1,0 +1,10 @@
+[Unit]
+Description=Mikrotik config backup for %I router
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=60
+Persistent=true
+
+[Install]
+WantedBy=timers.target

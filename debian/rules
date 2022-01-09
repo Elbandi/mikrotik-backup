@@ -14,5 +14,8 @@ override_dh_auto_configure:
 override_dh_auto_install:
 	dh_auto_install -- --no-source
 
+override_dh_installsystemd:
+	dh_installsystemd -pmikrotik-backup mikrotik-backup@.timer mikrotik-backup@.service
+
 %:
 	dh $@ --buildsystem=golang --with=golang

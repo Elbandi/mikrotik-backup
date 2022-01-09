@@ -1,0 +1,10 @@
+[Unit]
+Description=Mikrotik config backup for %I router
+Wants=mikrotik-backup@.timer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/mikrotik-backup -f /etc/mikrotik-backup/%i.ini
+
+[Install]
+WantedBy=multi-user.target
