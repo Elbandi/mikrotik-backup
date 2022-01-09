@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+export CGO_ENABLED := 0
+export GO111MODULE := on
+export GOPROXY ?= https://proxy.golang.org
+export GOCACHE := /tmp/.cache
+export DH_GOLANG_BUILDPKG = mikrotik-backup
+export DH_GOPKG := mikrotik-backup
+
+override_dh_auto_configure:
+	go mod tidy
+	dh_auto_configure
+
+override_dh_auto_install:
+	dh_auto_install -- --no-source
+
+%:
+	dh $@ --buildsystem=golang --with=golang

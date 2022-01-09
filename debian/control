@@ -1,0 +1,20 @@
+Source: mikrotik-backup
+Section: devel
+Priority: optional
+Maintainer: Andras Elso <elso.andras@gmail.com>
+Build-Depends: debhelper (>= 11),
+               dh-golang,
+               golang-any
+Standards-Version: 4.2.1
+Homepage: https://github.com/Elbandi/mikrotik-backup
+XS-Go-Import-Path: github.com/Elbandi/mikrotik-backup
+Testsuite: autopkgtest-pkg-go
+
+Package: mikrotik-backup
+Architecture: any
+Built-Using: ${misc:Built-Using}
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Description: Mikrotik backup to git repo
+ mikrotik-backup is a command line utility for backup mikrotik config to a
+ git repository.
