@@ -230,8 +230,10 @@ func main() {
 
 	serial, err := getSerialNumber(client)
 	CheckErr(err, "get serial number")
+	if debug {
+		fmt.Println("Mikrotik serial number: ", serial)
+	}
 
-	fmt.Println(serial)
 	session, err := client.NewSession()
 	CheckErr(err, "create command session")
 	defer DeferEOFClose(session, "close command session")
