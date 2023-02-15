@@ -241,7 +241,7 @@ func main() {
 	stdout, err := session.StdoutPipe()
 	CheckErr(err, "create session pipe")
 
-	err = session.Run("/export; /user export")
+	err = session.Run("/export show-sensitive; /user export show-sensitive")
 	CheckErr(err, "run export")
 
 	err = writeMikrotikBackup(config.Git, serial, stdout)
