@@ -14,7 +14,14 @@ type mikrotikOptions struct {
 	KeyFile  string `ini:"keyfile"`
 }
 
+type notifyOptions struct {
+	OnSuccess    string `ini:"onsuccess"`
+	OnFailure    string `ini:"onfailure"`
+	OnFailureMsg string `ini:"onfailure_msg"`
+}
+
 type configOptions struct {
 	Mikrotik mikrotikOptions `ini:"mikrotik"`
+	Notify   notifyOptions   `ini:"notify,omitempty"`
 	Git      gitOptions      `ini:"git"`
 }

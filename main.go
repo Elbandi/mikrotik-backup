@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -26,8 +27,21 @@ var (
 	debug      bool
 )
 
+func RunCmd(command string) {
+	cmd := exec.Command("/bin/sh")
+	cmd.Stdin = strings.NewReader(command)
+	err := cmd.Run()
+	PrintErr(err, "Failure to exec notify")
+}
+
 func CheckErr(err error, str string) {
 	if err != nil {
+		if len(config.Notify.OnFailure) > 0 {
+			RunCmd(config.Notify.OnFailure)
+		}
+		if len(config.Notify.OnFailureMsg) > 0 {
+			RunCmd(config.Notify.OnFailureMsg + " " + fmt.Sprintf("Error %s: %s", str, err.Error()))
+		}
 		log.Fatalf("Error %s: %s", str, err.Error())
 	}
 }
@@ -246,4 +260,8 @@ func main() {
 
 	err = writeMikrotikBackup(config.Git, serial, stdout)
 	CheckErr(err, "write backup")
+
+	if len(config.Notify.OnSuccess) > 0 {
+		RunCmd(config.Notify.OnSuccess)
+	}
 }
