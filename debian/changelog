@@ -1,3 +1,9 @@
+mikrotik-backup (0.3-1) unstable; urgency=medium
+
+  * Run command on success or failure
+
+ -- Andras Elso <elso.andras@gmail.com>  Thu, 16 Feb 2023 21:27:56 +0000
+
 mikrotik-backup (0.2-1) unstable; urgency=medium
 
   * Add debian systemd timer
