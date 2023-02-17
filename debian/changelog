@@ -1,3 +1,10 @@
+mikrotik-backup (0.4-1) unstable; urgency=medium
+
+  * Trim response
+  * Use software id on chr/x86 router
+
+ -- Andras Elso <elso.andras@gmail.com>  Fri, 17 Feb 2023 13:50:56 +0000
+
 mikrotik-backup (0.3-1) unstable; urgency=medium
 
   * Run command on success or failure
