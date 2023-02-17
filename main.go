@@ -82,17 +82,44 @@ func connectToHost(config mikrotikOptions) (*gossh.Client, error) {
 	return client, nil
 }
 
+func getBoardName(client *gossh.Client) (string, error) {
+	session, err := client.NewSession()
+	if err != nil {
+		return "", err
+	}
+	defer DeferEOFClose(session, "close boardname session")
+	board, err := session.Output(":put [/system resource get board-name]")
+	if err != nil {
+		return "", err
+	}
+	return trimResponse(board), nil
+}
+
+func getSerialCommand(str string) string {
+	if str == "CHR" || str == "x86" {
+		return ":put [/system/license/get software-id]"
+	}
+	return ":put [/system routerboard get serial-number]"
+}
+
 func trimResponse(b []byte) string {
 	return strings.TrimSpace(string(b))
 }
 
 func getSerialNumber(client *gossh.Client) (string, error) {
+	board, err := getBoardName(client)
+	if err != nil {
+		return "", err
+	}
+
 	session, err := client.NewSession()
 	if err != nil {
 		return "", err
 	}
 	defer DeferEOFClose(session, "close serialnumber session")
-	serial, err := session.Output(":put [/system routerboard get serial-number]")
+
+	cmd := getSerialCommand(board)
+	serial, err := session.Output(cmd)
 	if err != nil {
 		return "", err
 	}
