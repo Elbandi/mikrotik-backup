@@ -82,6 +82,10 @@ func connectToHost(config mikrotikOptions) (*gossh.Client, error) {
 	return client, nil
 }
 
+func trimResponse(b []byte) string {
+	return strings.TrimSpace(string(b))
+}
+
 func getSerialNumber(client *gossh.Client) (string, error) {
 	session, err := client.NewSession()
 	if err != nil {
@@ -93,7 +97,7 @@ func getSerialNumber(client *gossh.Client) (string, error) {
 		return "", err
 	}
 
-	return string(serial), nil
+	return trimResponse(serial), nil
 }
 
 func saveToFile(w *git.Worktree, filename string, source io.Reader) (written int64, err error) {
