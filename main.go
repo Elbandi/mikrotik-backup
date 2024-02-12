@@ -139,6 +139,14 @@ func saveToFile(w *git.Worktree, filename string, source io.Reader) (written int
 	written = int64(0)
 	for {
 		str, err := read.ReadString('\n')
+		if err == io.EOF {
+			err := write.Flush()
+			PrintErr(err, "close git file")
+			break
+		}
+		if err != nil {
+			return written, err
+		}
 		if len(str) > 0 {
 			if strings.HasPrefix(str, "# software id") ||
 				strings.Contains(str, "by RouterOS") {
@@ -151,14 +159,6 @@ func saveToFile(w *git.Worktree, filename string, source io.Reader) (written int
 			if nw > 0 {
 				written += int64(nw)
 			}
-		}
-		if err == io.EOF {
-			err := write.Flush()
-			PrintErr(err, "close git file")
-			break
-		}
-		if err != nil {
-			return written, err
 		}
 	}
 	return
