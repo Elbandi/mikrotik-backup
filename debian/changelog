@@ -1,3 +1,10 @@
+mikrotik-backup (0.5-1) unstable; urgency=medium
+
+  * Check error first
+  * Exclude sniffer tool configs
+
+ -- Andras Elso <elso.andras@gmail.com>  Mon, 12 Feb 2024 20:28:16 +0000
+
 mikrotik-backup (0.4-1) unstable; urgency=medium
 
   * Trim response
