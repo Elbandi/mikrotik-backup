@@ -137,6 +137,7 @@ func saveToFile(w *git.Worktree, filename string, source io.Reader) (written int
 	read := bufio.NewReader(source)
 	write := bufio.NewWriter(writer)
 	written = int64(0)
+loop:
 	for {
 		str, err := read.ReadString('\n')
 		if err == io.EOF {
@@ -151,6 +152,22 @@ func saveToFile(w *git.Worktree, filename string, source io.Reader) (written int
 			if strings.HasPrefix(str, "# software id") ||
 				strings.Contains(str, "by RouterOS") {
 				continue
+			}
+			if strings.HasPrefix(str, "/tool sniffer") {
+				for {
+					str, err := read.ReadString('\n')
+					if err == io.EOF {
+						err := write.Flush()
+						PrintErr(err, "close git file")
+						break loop
+					}
+					if err != nil {
+						return written, err
+					}
+					if !strings.HasSuffix(str, "\\\r\n") {
+						continue loop
+					}
+				}
 			}
 			nw, err := write.WriteString(str)
 			if err != nil {
