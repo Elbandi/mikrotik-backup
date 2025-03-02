@@ -95,8 +95,21 @@ func getBoardName(client *gossh.Client) (string, error) {
 	return trimResponse(board), nil
 }
 
+func getArchitectureName(client *gossh.Client) (string, error) {
+	session, err := client.NewSession()
+	if err != nil {
+		return "", err
+	}
+	defer DeferEOFClose(session, "close boardname session")
+	board, err := session.Output(":put [/system resource get architecture-name]")
+	if err != nil {
+		return "", err
+	}
+	return trimResponse(board), nil
+}
+
 func getSerialCommand(str string) string {
-	if str == "CHR" || str == "x86" {
+	if str == "CHR" || str == "x86_64" {
 		return ":put [/system/license/get software-id]"
 	}
 	return ":put [/system routerboard get serial-number]"
@@ -107,7 +120,7 @@ func trimResponse(b []byte) string {
 }
 
 func getSerialNumber(client *gossh.Client) (string, error) {
-	board, err := getBoardName(client)
+	arch, err := getArchitectureName(client)
 	if err != nil {
 		return "", err
 	}
@@ -118,7 +131,7 @@ func getSerialNumber(client *gossh.Client) (string, error) {
 	}
 	defer DeferEOFClose(session, "close serialnumber session")
 
-	cmd := getSerialCommand(board)
+	cmd := getSerialCommand(arch)
 	serial, err := session.Output(cmd)
 	if err != nil {
 		return "", err
